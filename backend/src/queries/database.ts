@@ -4,7 +4,6 @@ dotenv.config();
 
 const pool = new Pool();
 
-console.log('pool', pool);
 export const query = async (text: string, params?: any[]) => {
   const start = Date.now();
   const res = await pool

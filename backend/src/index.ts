@@ -2,7 +2,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import helmet from 'helmet';
-import * as db from '../database/database';
+import CommentsRouter from './routes/comments.router';
 
 // make sure to create an .env file in the root of the project!
 dotenv.config();
@@ -15,10 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Init Routes
+app.use('/comments', CommentsRouter);
+//
 app.get('/', async (req: Request, res: Response) => {
-  const rows = await db.query('SELECT NOW()');
-  console.log('rows', rows);
-
   res.send(`
 		<h1>Welcome to Node Express TS API Server!!! </h1>
 		<p>
