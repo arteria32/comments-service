@@ -15,9 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Init Routes
+/* Init Routes */
 app.use('/comments', CommentsRouter);
-//
 app.get('/', async (req: Request, res: Response) => {
   res.send(`
 		<h1>Welcome to Node Express TS API Server!!! </h1>
