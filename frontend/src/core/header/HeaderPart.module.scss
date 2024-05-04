@@ -1,0 +1,30 @@
+.header {
+    width: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: var(--g-spacing-2);
+    padding: var(--g-spacing-2);
+}
+
+.block {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--g-spacing);
+
+    &.left {
+        justify-content: flex-start;
+    }
+
+    &.center {
+        justify-content: center;
+    }
+
+    &.right {
+        justify-content: flex-end;
+    }
+}
