@@ -1,0 +1,19 @@
+.app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.header {
+  flex: 0 0 calc(2 * var(--g-spacing-10));
+  overflow: hidden;
+}
+.router{
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+}
