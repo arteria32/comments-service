@@ -1,11 +1,17 @@
 import { ThemeProvider } from '@gravity-ui/uikit';
+import { useSelector } from 'react-redux';
 import styles from './App.module.scss';
 import HeaderPart from './core/header/HeaderPart';
+import { RootState } from './services/store';
 
 const App = () => {
+  const currentTheme = useSelector(
+    (state: RootState) => state.uiManagerSlice.theme,
+  );
+
   return (
     <>
-      <ThemeProvider theme="light">
+      <ThemeProvider theme={currentTheme}>
         <div className={styles.app}>
           <div className={styles.header}>
             <HeaderPart />

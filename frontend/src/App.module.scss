@@ -6,13 +6,16 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
+  background: var(--g-color-base-background);
 }
 
 .header {
-  flex: 0 0 calc(2 * var(--g-spacing-10));
+  flex: 0 0 calc(2 * var(--g-spacing-8));
   overflow: hidden;
+  background: var(--g-color-base-generic);
 }
-.router{
+
+.router {
   flex: 1 1 auto;
   display: flex;
   overflow: hidden;
