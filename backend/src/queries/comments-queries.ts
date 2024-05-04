@@ -11,7 +11,7 @@ const parseCommentFromDataBase = (item: any): Comment =>
     item['modifed_at'],
   );
 
-export const getAllComments = async (): Promise<Comment[]> => {
+export const queryGetAllComments = async (): Promise<Comment[]> => {
   const result = await query(
     'SELECT * FROM public.comments ORDER BY created_at asc',
   );
@@ -20,8 +20,8 @@ export const getAllComments = async (): Promise<Comment[]> => {
   return comments;
 };
 
-export const getCommentById = async (
-  id: string,
+export const queryGetCommentById = async (
+  id: number,
 ): Promise<Comment | undefined | null> => {
   const result = await query(`SELECT * FROM comments WHERE ID=${id}`);
   if (!result) return null;
@@ -29,12 +29,12 @@ export const getCommentById = async (
   return comment;
 };
 
-export const deleteCommentById = async (id: string) => {
+export const queryDeleteCommentById = async (id: number) => {
   const result = await query(`DELETE  FROM comments WHERE ID=${id}`);
   console.log('result deleteCommentById', result);
 };
 
-export const insertNewComment = async (
+export const queryInsertNewComment = async (
   body: CommentInstance,
 ): Promise<Comment | undefined | null> => {
   const text =
@@ -44,7 +44,7 @@ export const insertNewComment = async (
   const comment = result?.rows.map(parseCommentFromDataBase).at(0);
   return comment;
 };
-export const updateCommentById = async (
+export const qureyUpdateCommentById = async (
   id: number,
   body: CommentInstance,
 ): Promise<Comment | undefined | null> => {

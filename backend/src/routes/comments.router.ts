@@ -1,25 +1,20 @@
+import CommentsController from '@controllers/comments-controller';
 import { CommentInstance } from '@models/comment';
 import express from 'express';
-import {
-  deleteCommentById,
-  getAllComments,
-  getCommentById,
-  insertNewComment,
-  updateCommentById,
-} from 'src/queries/comments-queries';
 
 const app = express();
+const commentController = new CommentsController();
 
 // Comments routing
 const CommentsRouter = express.Router();
 CommentsRouter.get('/', async function (req, res, next) {
-  const result = await getAllComments();
+  const result = await commentController.getAllComments();
   res.send(result);
 });
 
 CommentsRouter.get('/:id', async function (req, res, next) {
   const { id } = req.params;
-  const result = await getCommentById(id);
+  const result = await commentController.getCommentById(id);
   if (!result) {
     res.sendStatus(404);
   } else {
@@ -29,7 +24,7 @@ CommentsRouter.get('/:id', async function (req, res, next) {
 
 CommentsRouter.delete('/:id', async function (req, res, next) {
   const { id } = req.params;
-  const result = await deleteCommentById(id);
+  const result = await commentController.deleteCommentById(id);
   res.send(result);
 });
 
@@ -39,7 +34,7 @@ CommentsRouter.post('/', async function (req, res, next) {
     req.body['body'],
     req.body['userId'],
   );
-  const response = await insertNewComment(comment);
+  const response = await commentController.addNewComment(comment);
   if (!response) {
     res.sendStatus(400);
   } else {
@@ -53,7 +48,7 @@ CommentsRouter.put('/:id', async function (req, res, next) {
     req.body['body'],
     req.body['userId'],
   );
-  const result = await updateCommentById(Number(id), comment);
+  const result = await commentController.updateComment(id, comment);
   res.send(result);
 });
 
