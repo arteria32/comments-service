@@ -5,7 +5,7 @@ import {
   queryGetCommentById,
   queryInsertNewComment,
   qureyUpdateCommentById,
-} from 'src/queries/comments-queries';
+} from '@queries/comments-queries';
 
 class CommentsController {
   getAllComments(): Promise<Comment[]> {
