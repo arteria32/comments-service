@@ -9,7 +9,7 @@
     "removeComments": true,
     "noImplicitAny": false,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "src",
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -43,11 +43,14 @@
     ],
     "paths": {
       "@models/*": [
-        "src/models/*"
+        "models/*"
       ],
       "@controllers/*": [
-        "src/controllers/*"
+        "controllers/*"
       ],
+      "@queries/*":[
+        "queries/*"
+      ]
     }
   },
   "exclude": [
