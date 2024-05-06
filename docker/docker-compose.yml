@@ -25,7 +25,6 @@ services:
         - postgres
   api:
       build: ../backend
-      env_file: ./.env
       restart: unless-stopped
       ports:
         - 1234:5550
@@ -38,8 +37,10 @@ services:
         - PORT=5550
       depends_on:
         - postgres
-  app:
+  frontend:
       build: 
+        args:
+          - REACT_APP_API_URL=http://localhost:1234
         context: ../frontend
       volumes:
       - ../frontend:/frontend
@@ -47,8 +48,6 @@ services:
       restart: always
       ports:
         - 3000:80
-      environment:
-        - API_PORT=5550
       depends_on:
         - api
 volumes:

@@ -1,3 +1,3 @@
 export const environment = {
-  commentsServiceApi: process.env.API_PORT || 'http://localhost:5000',
+  commentsServiceApi: process.env.REACT_APP_API_URL || 'http://localhost:5000',
 };
