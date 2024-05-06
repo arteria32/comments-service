@@ -1,11 +1,12 @@
 services:
   postgres:
     image: postgres
+    env_file: ./.env
     restart: always
     environment:
-      POSTGRES_DB: "db"
-      POSTGRES_USER: "dbuser"
-      POSTGRES_PASSWORD: "dbpassword"
+      - POSTGRES_USER=$POSTGRESDB_USER
+      - POSTGRES_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_DATABASE
     volumes:
       - ../backend/db/migrations:/docker-entrypoint-initdb.d/
     ports:
@@ -20,6 +21,21 @@ services:
         - 15432:80
       volumes:
         - pgadmin:/var/lib/pgadmin
+      depends_on:
+        - postgres
+  api:
+      build: ../backend
+      env_file: ./.env
+      restart: unless-stopped
+      ports:
+        - 1234:5550
+      environment:
+        - PGDATABASE=$POSTGRESDB_DATABASE
+        - PGUSER=$POSTGRESDB_USER
+        - DB_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
+        - PGHOST=postgres
+        - PGPORT=5432
+        - PORT=5550
       depends_on:
         - postgres
 volumes:

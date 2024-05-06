@@ -31,7 +31,6 @@ export const queryGetCommentById = async (
 
 export const queryDeleteCommentById = async (id: number) => {
   const result = await query(`DELETE  FROM comments WHERE ID=${id}`);
-  console.log('result deleteCommentById', result);
 };
 
 export const queryInsertNewComment = async (
