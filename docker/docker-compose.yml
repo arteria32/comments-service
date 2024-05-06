@@ -38,6 +38,19 @@ services:
         - PORT=5550
       depends_on:
         - postgres
+  app:
+      build: 
+        context: ../frontend
+      volumes:
+      - ../frontend:/frontend
+      env_file: ./.env
+      restart: always
+      ports:
+        - 3000:80
+      environment:
+        - API_PORT=5550
+      depends_on:
+        - api
 volumes:
   postgres:
   pgadmin:
