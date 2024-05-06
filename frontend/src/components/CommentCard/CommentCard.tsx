@@ -1,15 +1,22 @@
 import { Button, Card, TextArea } from '@gravity-ui/uikit';
 import cn from 'classnames';
 import dayjs from 'dayjs';
-import { FC, memo } from 'react';
+import { FC, memo, useCallback } from 'react';
 import { Comment } from '../../types/api/comment';
 import styles from './CommentCard.module.scss';
-type CommentCardProps = Comment & { className: string };
+type CommentCardProps = Comment & {
+  className: string;
+  onCommentEdit?: (comment: Comment) => void;
+};
 
 const getParsedUpdatedTime = (comment: Comment) =>
-  dayjs(comment.modifedAt || comment.createdAt).format('DD:MM:YYYY hh:mm');
+  dayjs(comment.modifedAt || comment.createdAt).format('DD:MM:YYYY HH:MM');
 
 const CommentCard: FC<CommentCardProps> = (comment) => {
+  const handleEditClick = useCallback(() => {
+    if (!comment.onCommentEdit) return;
+    comment.onCommentEdit(comment);
+  }, [comment.onCommentEdit]);
   return (
     <Card className={cn(styles.card, comment.className)}>
       <section className={styles.header}>
@@ -19,17 +26,19 @@ const CommentCard: FC<CommentCardProps> = (comment) => {
             {comment.userId}
           </p>
           <p>
-            <span className={styles.title}>Объект комментария:</span>
+            <span className={styles.title}>Объект:</span>
             {comment.objectId}
           </p>
-        </section>
-
-        <section className={styles.actions}>
           <p>
             <span className={styles.title}>Последнее изменение:</span>
             {getParsedUpdatedTime(comment)}
           </p>
-          <Button size="s">Редактировать</Button>
+        </section>
+
+        <section className={styles.actions}>
+          <Button size="s" onClick={() => handleEditClick()}>
+            Редактировать
+          </Button>
         </section>
       </section>
 
