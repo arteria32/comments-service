@@ -2,15 +2,18 @@ import { Alert, Button, Loader, TextArea, TextInput } from '@gravity-ui/uikit';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { FC, useEffect } from 'react';
 import { Controller, Form, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { Comment, CommentInstance } from 'types/api/comment';
 import {
+  useCreateCommentMutation,
   useLazyGetCommentByIdQuery,
   useUpdateCommentMutation,
 } from '../../services/API/comments.api';
 import styles from './CommentViewerPart.module.scss';
 
 type CommentViewerPartProps = {
-  commentId: number | null;
+  commentId?: number | null;
+  isNewComment?: boolean;
 };
 
 const DEFAULT_COMMENT_VALUE: CommentInstance = {
@@ -19,7 +22,10 @@ const DEFAULT_COMMENT_VALUE: CommentInstance = {
   body: 'Comment body',
 };
 
-const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
+const CommentViewerPart: FC<CommentViewerPartProps> = ({
+  commentId,
+  isNewComment,
+}) => {
   /* Fetch comment info */
   const [fetchCommentInfo, { data: commentInfo, status: commentInfoStatus }] =
     useLazyGetCommentByIdQuery();
@@ -40,6 +46,16 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
     updateComment,
     { isLoading: isUpdatingComment, error: errorUpdateComment },
   ] = useUpdateCommentMutation();
+
+  const [
+    createNewComment,
+    {
+      isLoading: isCreatingNewComment,
+      error: errorCreateComment,
+      data: newComment,
+    },
+  ] = useCreateCommentMutation();
+
   const onSubmit = (data: CommentInstance) => {
     if (commentId) {
       //Update currrent comment
@@ -50,13 +66,28 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
       updateComment(payload);
     } else {
       //Create  new comment
+      createNewComment(data);
     }
   };
+
+  const checkLoadingComment = () => isCreatingNewComment || isUpdatingComment;
 
   useEffect(() => {
     if (!errorUpdateComment) return;
     alert(errorUpdateComment);
   }, [errorUpdateComment]);
+
+  useEffect(() => {
+    if (!errorCreateComment) return;
+    alert(errorCreateComment);
+  }, [errorCreateComment]);
+
+  /* NavigateToSavedComment */
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!newComment) return;
+    navigate(`/comment/${newComment.id}`);
+  }, [newComment]);
 
   const renderCardForm = () => {
     return (
@@ -67,7 +98,7 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
       >
         <Controller
           name="userId"
-          disabled={isUpdatingComment}
+          disabled={checkLoadingComment()}
           control={commentControl}
           render={({ field }) => (
             <TextInput label="Автор комментария" {...field} />
@@ -75,7 +106,7 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
         />
         <Controller
           name="objectId"
-          disabled={isUpdatingComment}
+          disabled={checkLoadingComment()}
           control={commentControl}
           render={({ field }) => (
             <TextInput label="Объект комментария" {...field} />
@@ -83,12 +114,12 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
         />
         <Controller
           name="body"
-          disabled={isUpdatingComment}
+          disabled={checkLoadingComment()}
           control={commentControl}
           render={({ field }) => <TextArea rows={4} {...field} />}
         />
-        <Button type="submit" disabled={isUpdatingComment}>
-          Обновить комментарий
+        <Button type="submit" view="action" disabled={checkLoadingComment()}>
+          Cохранить изменения
         </Button>
       </Form>
     );
@@ -98,7 +129,7 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
       case QueryStatus.uninitialized:
         return 'uninitialized';
       case QueryStatus.fulfilled:
-        return commentControl ? renderCardForm() : 'Bad Request';
+        return renderCardForm();
       case QueryStatus.pending:
         return (
           <div className={styles.plug}>
@@ -123,7 +154,9 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
 
   return (
     <div className={styles.layout}>
-      {renderContentByStatus(commentInfoStatus)}
+      {isNewComment
+        ? renderCardForm()
+        : renderContentByStatus(commentInfoStatus)}
     </div>
   );
 };

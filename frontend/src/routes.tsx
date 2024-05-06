@@ -12,7 +12,7 @@ const routesConfig = createBrowserRouter([
     Component: CommentsListPage,
   },
   {
-    path: '/comment/:id',
+    path: '/comment/:id?',
     Component: CommentViewerPage,
   },
 ]);

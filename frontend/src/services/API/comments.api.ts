@@ -1,7 +1,7 @@
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { environment } from '../../environments/environment';
-import { Comment } from '../../types/api/comment';
+import { Comment, CommentInstance } from '../../types/api/comment';
 
 // Define a service using a base URL and expected endpoints
 export const commentsApi = createApi({
@@ -25,6 +25,14 @@ export const commentsApi = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
+    createComment: builder.mutation<Comment, CommentInstance>({
+      query: (comment) => ({
+        url: `comments`,
+        method: 'POST',
+        body: comment,
+      }),
+      invalidatesTags: ['Comments'],
+    }),
     deleteComment: builder.mutation<null, number>({
       query: (id) => ({
         url: `comments/${id}`,
@@ -43,4 +51,5 @@ export const {
   useLazyGetCommentByIdQuery,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useCreateCommentMutation,
 } = commentsApi;

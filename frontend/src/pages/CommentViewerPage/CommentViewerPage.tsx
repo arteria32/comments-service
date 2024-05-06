@@ -7,10 +7,15 @@ const CommentViewerPage: FC = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
+
   const navigateToCommentsList = () => {
     navigate('/comments');
   };
+
   const checkCommentId = (commentId?: string) => {
+    if (!commentId) {
+      return <CommentViewerPart isNewComment />;
+    }
     const parsedId = Number(commentId);
     if (Number.isNaN(parsedId)) {
       return (
@@ -32,6 +37,7 @@ const CommentViewerPage: FC = () => {
     }
     return <CommentViewerPart commentId={parsedId} />;
   };
+
   return (
     <div className={styles.page}>
       <section className={styles.body}>{checkCommentId(id)}</section>
