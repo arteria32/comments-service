@@ -5,6 +5,6 @@ export type CommentInstance = {
 };
 export type Comment = CommentInstance & {
   id: number;
-  createdAt: string;
-  modifedAt: string;
+  createdAt?: string;
+  modifedAt?: string;
 };

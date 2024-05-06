@@ -13,7 +13,7 @@ const parseCommentFromDataBase = (item: any): Comment =>
 
 export const queryGetAllComments = async (): Promise<Comment[]> => {
   const result = await query(
-    'SELECT * FROM public.comments ORDER BY created_at asc',
+    'SELECT * FROM public.comments ORDER BY modifed_at DESC',
   );
   if (!result) return [];
   const comments = result?.rows.map(parseCommentFromDataBase);
