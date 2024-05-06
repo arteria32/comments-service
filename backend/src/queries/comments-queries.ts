@@ -39,7 +39,7 @@ export const queryInsertNewComment = async (
 ): Promise<Comment | undefined | null> => {
   const text =
     'INSERT INTO comments(object_id, body,user_id) VALUES($1, $2,$3) RETURNING *';
-  const values = Object.values(body);
+  const values = [body.objectId, body.body, body.userId];
   const result = await query(text, values);
   const comment = result?.rows.map(parseCommentFromDataBase).at(0);
   return comment;
@@ -49,7 +49,7 @@ export const qureyUpdateCommentById = async (
   body: CommentInstance,
 ): Promise<Comment | undefined | null> => {
   const text = `UPDATE comments SET object_id=$1, body=$2, user_id=$3, modifed_at=NOW() WHERE ID=${id} RETURNING *`;
-  const values = Object.values(body);
+  const values = [body.objectId, body.body, body.userId];
   const result = await query(text, values);
   const comment = result?.rows.map(parseCommentFromDataBase).at(0);
   return comment;
