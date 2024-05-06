@@ -1,25 +1,41 @@
 import { Alert, Button, Loader } from '@gravity-ui/uikit';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import CommentCard from 'components/CommentCard/CommentCard';
-import { FC, Fragment, useCallback, useMemo } from 'react';
+import { FC, Fragment, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Comment } from 'types/api/comment';
-import { useGetAllCommentsQuery } from '../../services/API/comments.api';
+import {
+  useDeleteCommentMutation,
+  useGetAllCommentsQuery,
+} from '../../services/API/comments.api';
 import styles from './CommentsListPart.module.scss';
 
 const CommentsListPart: FC = () => {
+  //Fetching data
   const {
     data: commentsList,
     status: commentsListStatus,
     refetch: refetchCardsList,
   } = useGetAllCommentsQuery(null);
 
+  //Handle edit comment
   const navigate = useNavigate();
 
-  const handleCardClick = useCallback((commentBody: Comment) => {
+  const handleCardEdit = useCallback((commentBody: Comment) => {
     navigate(`/comment/${commentBody.id}`);
   }, []);
-  console.log('Comment', commentsList);
+
+  //Handle delete comment
+  const [deleteComment, resultDeleteComment] = useDeleteCommentMutation();
+  const handelCardDelete = (commentBody: Comment) => {
+    deleteComment(commentBody.id);
+  };
+  useEffect(() => {
+    if (resultDeleteComment.error) {
+      alert(resultDeleteComment.error);
+    }
+  });
+  /*  */
   const commentsCards = useMemo(() => {
     return (
       <div className={styles.scrollList}>
@@ -28,7 +44,8 @@ const CommentsListPart: FC = () => {
             <CommentCard
               {...comment}
               className={styles.commentCard}
-              onCommentEdit={(commentBody) => handleCardClick(commentBody)}
+              onCommentEdit={(commentBody) => handleCardEdit(commentBody)}
+              onCommentDelete={(commentBody) => handelCardDelete(commentBody)}
             />
           </Fragment>
         ))}

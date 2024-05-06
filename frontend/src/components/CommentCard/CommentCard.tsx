@@ -7,6 +7,7 @@ import styles from './CommentCard.module.scss';
 type CommentCardProps = Comment & {
   className: string;
   onCommentEdit?: (comment: Comment) => void;
+  onCommentDelete?: (comment: Comment) => void;
 };
 
 const getParsedUpdatedTime = (comment: Comment) =>
@@ -17,6 +18,12 @@ const CommentCard: FC<CommentCardProps> = (comment) => {
     if (!comment.onCommentEdit) return;
     comment.onCommentEdit(comment);
   }, [comment.onCommentEdit]);
+
+  const handleDeleteClick = useCallback(() => {
+    if (!comment.onCommentDelete) return;
+    comment.onCommentDelete(comment);
+  }, [comment.onCommentDelete]);
+
   return (
     <Card className={cn(styles.card, comment.className)}>
       <section className={styles.header}>
@@ -38,6 +45,13 @@ const CommentCard: FC<CommentCardProps> = (comment) => {
         <section className={styles.actions}>
           <Button size="s" onClick={() => handleEditClick()}>
             Редактировать
+          </Button>
+          <Button
+            size="s"
+            view="outlined-danger"
+            onClick={() => handleDeleteClick()}
+          >
+            Удалить
           </Button>
         </section>
       </section>

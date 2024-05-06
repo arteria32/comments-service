@@ -36,22 +36,27 @@ const CommentViewerPart: FC<CommentViewerPartProps> = ({ commentId }) => {
     values: commentInfo,
   });
   /* Handler to Save Comment */
-  const [updateComment, { isLoading: isUpdatingComment }] =
-    useUpdateCommentMutation();
+  const [
+    updateComment,
+    { isLoading: isUpdatingComment, error: errorUpdateComment },
+  ] = useUpdateCommentMutation();
   const onSubmit = (data: CommentInstance) => {
-    console.log('data', data);
     if (commentId) {
       //Update currrent comment
       const payload: Comment = {
         ...data,
         id: commentId,
       };
-      console.log('payload', payload);
       updateComment(payload);
     } else {
       //Create  new comment
     }
   };
+
+  useEffect(() => {
+    if (!errorUpdateComment) return;
+    alert(errorUpdateComment);
+  }, [errorUpdateComment]);
 
   const renderCardForm = () => {
     return (

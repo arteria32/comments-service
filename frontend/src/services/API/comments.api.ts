@@ -25,6 +25,13 @@ export const commentsApi = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
+    deleteComment: builder.mutation<null, number>({
+      query: (id) => ({
+        url: `comments/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Comments'],
+    }),
   }),
 });
 
@@ -35,4 +42,5 @@ export const {
   useGetCommentByIdQuery,
   useLazyGetCommentByIdQuery,
   useUpdateCommentMutation,
+  useDeleteCommentMutation,
 } = commentsApi;
