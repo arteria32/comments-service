@@ -31,7 +31,8 @@ docker-compose -f docker/docker-compose.yml   build --no-cache
 docker-compose -f docker/docker-compose.yml  up
 ```
 
-3. Открыть интерфейс на 3000
+3. Открыть интерфейс на [Фронтенд](http://localhost:3000)
+4. Документация api на [Swagger](http://localhost:1234/api-docs/#/)
 
 ## Построен с использованием<a name="built_using"></a>
 
