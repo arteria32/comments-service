@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Project for commenting object",
-  "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "npm run swagger & ts-node src/index.ts",
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "swagger": "ts-node src/docs/swagger.ts"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.7",
     "@types/pg": "^8.11.5",
+    "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "eslint": "^8.57.0",
@@ -34,6 +35,8 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "pg": "^8.11.5",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   }
 }

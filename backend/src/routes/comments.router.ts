@@ -7,12 +7,24 @@ const commentController = new CommentsController();
 
 // Comments routing
 const CommentsRouter = express.Router();
+
 CommentsRouter.get('/', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+    #swagger.description = 'Возвращает список всех параметров' */
   const result = await commentController.getAllComments();
   res.send(result);
 });
 
 CommentsRouter.get('/:id', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Возвращает комментарий по id'
+  #swagger.parameters['id'] = {
+    in: 'path',
+    description: 'ID comment',
+    required: true,
+    type: 'integer'
+}
+ */
   const { id } = req.params;
   const result = await commentController.getCommentById(id);
   if (!result) {
@@ -23,12 +35,33 @@ CommentsRouter.get('/:id', async function (req, res, next) {
 });
 
 CommentsRouter.delete('/:id', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Удаляет комментарий по id'
+  #swagger.parameters['id'] = {
+    in: 'path',
+    description: 'ID comment',
+    required: true,
+    type: 'integer'
+}
+ */
   const { id } = req.params;
   const result = await commentController.deleteCommentById(id);
   res.send(result);
 });
 
 CommentsRouter.post('/', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Создает новый комментарий'
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Комментарий',
+            schema: {
+                userId: 'Автор комментария',
+                objectId: 'Объект комментария',
+                body: 'Тело комментария'
+            }
+    } 
+ */
   const comment = CommentInstance.fromBodyRequest(
     req.body['objectId'],
     req.body['body'],
@@ -42,6 +75,18 @@ CommentsRouter.post('/', async function (req, res, next) {
   }
 });
 CommentsRouter.put('/:id', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Обновляет комментарий'
+    /*  #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Комментарий',
+            schema: {
+                userId: 'Автор комментария',
+                objectId: 'Объект комментария',
+                body: 'Тело комментария'
+            }
+    } 
+ */
   const { id } = req.params;
   const comment = CommentInstance.fromBodyRequest(
     req.body['objectId'],

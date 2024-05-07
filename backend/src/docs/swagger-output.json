@@ -1,0 +1,158 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "CommentsApi",
+    "description": "CRUD сервис для работы с комментариями"
+  },
+  "host": "http://localhost:5000",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "Comments",
+      "description": "Эндпоинт для получения комментариев"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/comments/": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Возвращает список всех параметров",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Создает новый комментарий",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Комментарий",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "Автор комментария"
+                },
+                "objectId": {
+                  "type": "string",
+                  "example": "Объект комментария"
+                },
+                "body": {
+                  "type": "string",
+                  "example": "Тело комментария"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Возвращает комментарий по id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID comment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Удаляет комментарий по id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID comment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Обновляет комментарий",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Комментарий",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "Автор комментария"
+                },
+                "objectId": {
+                  "type": "string",
+                  "example": "Объект комментария"
+                },
+                "body": {
+                  "type": "string",
+                  "example": "Тело комментария"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
