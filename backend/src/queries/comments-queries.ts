@@ -86,3 +86,18 @@ export const queryGetCommentsByFilter = async (
   const comments = result?.rows?.map(parseCommentFromDataBase);
   return comments;
 };
+
+export const queryGetCommentsByLimit = async (
+  limit: number,
+  cursor = 0,
+): Promise<Comment[] | undefined | null> => {
+  let cursorString = ``;
+  if (cursor > 0) {
+    cursorString = `WHERE id<${cursor}`;
+  }
+  const result =
+    await query(`SELECT * FROM public.comments ${cursorString} ORDER BY id DESC
+   LIMIT ${limit}`);
+  const comments = result?.rows?.map(parseCommentFromDataBase);
+  return comments;
+};

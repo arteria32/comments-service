@@ -107,6 +107,38 @@
         }
       }
     },
+    "/comments/pages": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Возвращает страницы список комментариев.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Количество элементов",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "id комментария после которого надо взять limit элементов",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "В body хранятся все комментарии, в cursor-id последнего комментария из body"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/comments/{id}": {
       "get": {
         "tags": [

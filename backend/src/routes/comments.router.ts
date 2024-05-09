@@ -52,6 +52,36 @@ CommentsRouter.get('/filter', async function (req, res, next) {
   res.send(result);
 });
 
+CommentsRouter.get('/pages', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Возвращает страницы список комментариев.'
+  #swagger.parameters['limit'] = {
+        in: 'query',                            
+        description: 'Количество элементов',    
+        required:true,               
+        type: 'integer',                          
+  }
+  #swagger.parameters['cursor'] = {
+        in: 'query',                            
+        description: 'id комментария после которого надо взять limit элементов',    
+        required:true,                              
+        type: 'integer',                          
+  }
+#swagger.responses[200] = {
+            description: "В body хранятся все комментарии, в cursor-id последнего комментария из body",
+        } 
+ */
+  const params = req.query;
+  const limit = Number(params['limit']);
+  const cursor = Number(params['cursor']);
+  if (Number.isNaN(limit) || Number.isNaN(cursor)) {
+    res.status(400).send('Incorrect type cursor or limit');
+    return;
+  }
+  const result = await commentController.getCommentsByLimit(cursor, limit);
+  res.send(result);
+});
+
 CommentsRouter.get('/:id', async function (req, res, next) {
   /* 	#swagger.tags = ['Comments']
   #swagger.description = 'Возвращает комментарий по id'
