@@ -40,6 +40,7 @@ const CommentsListPart: FC = () => {
   ] = useLazyGetPaginationCommentsQuery();
 
   const refetchCardsList = () => {
+    setPageConfig({ page: 1, totalItems: DEFAULT_PAGE_LIMIT * 2 });
     getPageComments({
       cursor: 0,
       limit: DEFAULT_PAGE_LIMIT,
