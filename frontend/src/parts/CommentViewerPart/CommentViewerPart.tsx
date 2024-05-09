@@ -3,7 +3,7 @@ import { QueryStatus } from '@reduxjs/toolkit/query';
 import { FC, useEffect } from 'react';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Comment, CommentInstance } from 'types/api/comment';
+import { Comment, CommentInstance } from 'types/features/comment';
 import {
   useCreateCommentMutation,
   useLazyGetCommentByIdQuery,

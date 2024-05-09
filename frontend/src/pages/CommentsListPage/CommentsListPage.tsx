@@ -11,13 +11,13 @@ const CommentsListPage: FC = () => {
   };
   return (
     <div className={styles.page}>
-      <section className={styles.body}>
-        <CommentsListPart />
-      </section>
       <section className={styles.actions}>
         <Button view="action" onClick={() => createNewComment()}>
           Создать новый комментарий
         </Button>
+      </section>
+      <section className={styles.body}>
+        <CommentsListPart />
       </section>
     </div>
   );

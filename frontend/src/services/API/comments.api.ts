@@ -1,7 +1,11 @@
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  PaginationBody,
+  PaginationPayload,
+} from 'types/api/pagination-payload';
 import { environment } from '../../environments/environment';
-import { Comment, CommentInstance } from '../../types/api/comment';
+import { Comment, CommentInstance } from '../../types/features/comment';
 
 // Define a service using a base URL and expected endpoints
 export const commentsApi = createApi({
@@ -13,6 +17,23 @@ export const commentsApi = createApi({
       query: () => `comments`,
       providesTags: (result) =>
         result ? result.map(({ id }) => ({ type: 'Comments', id })) : [],
+    }),
+    getPaginationComments: builder.query<
+      PaginationBody<Comment>,
+      PaginationPayload
+    >({
+      query: (payload) => {
+        return {
+          url: `comments/pages`,
+          method: 'GET',
+          params: {
+            cursor: payload.cursor ?? 0,
+            limit: payload.limit,
+          },
+        };
+      },
+      providesTags: (result) =>
+        result ? result.data.map(({ id }) => ({ type: 'Comments', id })) : [],
     }),
     getCommentById: builder.query<Comment, string | number>({
       query: (id) => `comments/${id}`,
@@ -52,4 +73,5 @@ export const {
   useUpdateCommentMutation,
   useDeleteCommentMutation,
   useCreateCommentMutation,
+  useLazyGetPaginationCommentsQuery,
 } = commentsApi;

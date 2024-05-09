@@ -2,7 +2,7 @@ import { Button, Card, TextArea } from '@gravity-ui/uikit';
 import cn from 'classnames';
 import dayjs from 'dayjs';
 import { FC, memo, useCallback } from 'react';
-import { Comment } from '../../types/api/comment';
+import { Comment } from '../../types/features/comment';
 import styles from './CommentCard.module.scss';
 type CommentCardProps = Comment & {
   className: string;
@@ -25,7 +25,10 @@ const CommentCard: FC<CommentCardProps> = (comment) => {
   }, [comment.onCommentDelete]);
 
   return (
-    <Card className={cn(styles.card, comment.className)}>
+    <Card
+      className={cn(styles.card, comment.className)}
+      title={comment.id.toString()}
+    >
       <section className={styles.header}>
         <section>
           <p>
