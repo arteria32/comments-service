@@ -1,8 +1,9 @@
 import CommentsController from '@controllers/comments-controller';
 import { CommentInstance } from '@models/comment';
 import express from 'express';
+import { parseDateRangeFromQueryParams } from 'shared/utils/parse-daterange-from-query';
+import { transformToArray } from 'shared/utils/transform-to-array';
 
-const app = express();
 const commentController = new CommentsController();
 
 // Comments routing
@@ -12,6 +13,42 @@ CommentsRouter.get('/', async function (req, res, next) {
   /* 	#swagger.tags = ['Comments']
     #swagger.description = 'Возвращает список всех параметров' */
   const result = await commentController.getAllComments();
+  res.send(result);
+});
+
+CommentsRouter.get('/filter', async function (req, res, next) {
+  /* 	#swagger.tags = ['Comments']
+  #swagger.description = 'Возвращает Список комментариев по фильтрам. Список должнен удовлетворять ограничениям по каждому полю (AND). Можно добавлять несколько значений каждого поля.'
+  #swagger.parameters['objectId'] = {
+        in: 'query',                            
+        description: 'Объкты комментария',                   
+        type: 'string',                          
+  }
+  #swagger.parameters['userId'] = {
+        in: 'query',                            
+        description: 'Автор комментария',                   
+        type: 'string',                          
+}
+  #swagger.parameters['from'] = {
+        in: 'query',                            
+        description: 'Начало интервала (дата последней модификации)',                   
+        type: 'string',                          
+}
+  #swagger.parameters['to'] = {
+        in: 'query',                            
+        description: 'Конец интервала (дата последней модификации)',                   
+        type: 'string',                          
+}
+ */
+  const params = req.query;
+  const filterUserId = transformToArray(params['userId']);
+  const filterObjectId = transformToArray(params['objectId']);
+  const dateRange = parseDateRangeFromQueryParams(params);
+  const result = await commentController.getCommentsByFilter(
+    filterUserId,
+    filterObjectId,
+    dateRange,
+  );
   res.send(result);
 });
 

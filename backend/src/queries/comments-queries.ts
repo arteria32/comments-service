@@ -1,4 +1,5 @@
 import { Comment, CommentInstance } from '@models/comment';
+import { DateRange } from '@models/date-range';
 import { query } from './database';
 
 const parseCommentFromDataBase = (item: any): Comment =>
@@ -11,6 +12,20 @@ const parseCommentFromDataBase = (item: any): Comment =>
     item['modifed_at'],
   );
 
+const parsefilterStringFromDateRange = (range: DateRange): string => {
+  if (range.from && range.to) {
+    return `((modifed_at) BETWEEN '${range.from}' AND '${range.to}')`;
+  } else if (range.from) {
+    return `((modifed_at) > '${range.from}')`;
+  } else if (range.to) {
+    return `((modifed_at) < '${range.to}')`;
+  }
+  return '';
+};
+
+const combineFiltersToString = (key: string, values: string[]): string =>
+  `(${values.map((item) => `${key}='${item}'`).join(' OR ')})`;
+
 export const queryGetAllComments = async (): Promise<Comment[]> => {
   const result = await query(
     'SELECT * FROM public.comments ORDER BY modifed_at DESC',
@@ -19,7 +34,6 @@ export const queryGetAllComments = async (): Promise<Comment[]> => {
   const comments = result?.rows.map(parseCommentFromDataBase);
   return comments;
 };
-
 export const queryGetCommentById = async (
   id: number,
 ): Promise<Comment | undefined | null> => {
@@ -43,6 +57,7 @@ export const queryInsertNewComment = async (
   const comment = result?.rows.map(parseCommentFromDataBase).at(0);
   return comment;
 };
+
 export const qureyUpdateCommentById = async (
   id: number,
   body: CommentInstance,
@@ -52,4 +67,22 @@ export const qureyUpdateCommentById = async (
   const result = await query(text, values);
   const comment = result?.rows.map(parseCommentFromDataBase).at(0);
   return comment;
+};
+
+export const queryGetCommentsByFilter = async (
+  usersIds: string[],
+  objectsIds: string[],
+  dateRange?: DateRange | null,
+): Promise<Comment[] | undefined | null> => {
+  const filterStrings: string[] = [];
+  if (dateRange) filterStrings.push(parsefilterStringFromDateRange(dateRange));
+  if (objectsIds.length > 0)
+    filterStrings.push(combineFiltersToString('object_id', objectsIds));
+  if (usersIds.length > 0)
+    filterStrings.push(combineFiltersToString('user_id', usersIds));
+  const resultString =
+    filterStrings.length > 0 ? `WHERE ${filterStrings.join(' AND ')}` : '';
+  const result = await query(`SELECT * FROM public.comments ${resultString}`);
+  const comments = result?.rows?.map(parseCommentFromDataBase);
+  return comments;
 };

@@ -1,8 +1,10 @@
 import { Comment, CommentInstance } from '@models/comment';
+import { DateRange } from '@models/date-range';
 import {
   queryDeleteCommentById,
   queryGetAllComments,
   queryGetCommentById,
+  queryGetCommentsByFilter,
   queryInsertNewComment,
   qureyUpdateCommentById,
 } from '@queries/comments-queries';
@@ -25,6 +27,13 @@ class CommentsController {
     comment: CommentInstance,
   ): Promise<Comment | undefined | null> {
     return qureyUpdateCommentById(Number(id), comment);
+  }
+  getCommentsByFilter(
+    userIds: string[] = [],
+    objectIds: string[] = [],
+    dateRange?: DateRange | null,
+  ): Promise<Comment[] | undefined | null> {
+    return queryGetCommentsByFilter(userIds, objectIds, dateRange);
   }
 }
 

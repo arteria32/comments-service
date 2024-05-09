@@ -68,6 +68,45 @@
         }
       }
     },
+    "/comments/filter": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "Возвращает Список комментариев по фильтрам. Список должнен удовлетворять ограничениям по каждому полю (AND). Можно добавлять несколько значений каждого поля.",
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "query",
+            "description": "Объкты комментария",
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Автор комментария",
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Начало интервала (дата последней модификации)",
+            "type": "string"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Конец интервала (дата последней модификации)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/comments/{id}": {
       "get": {
         "tags": [
