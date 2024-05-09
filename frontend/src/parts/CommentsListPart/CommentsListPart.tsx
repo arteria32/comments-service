@@ -110,6 +110,13 @@ const CommentsListPart: FC = () => {
   });
   /*  */
   const commentsCards = useMemo(() => {
+    if (commentsList.length === 0) {
+      return (
+        <div className={styles.plug}>
+          <h2>Комментарии отсутствуют</h2>
+        </div>
+      );
+    }
     return (
       <div className={styles.gridList}>
         {commentsList?.map((comment) => (
